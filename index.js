@@ -10,7 +10,6 @@ const STORE = {
 
   hideChecked: false,
   searchPressed: [],
-  searched: false,
 };
 
 
@@ -18,6 +17,7 @@ function generateItemElement(item, itemIndex, template) {
   return `
     <li class="js-item-index-element" data-item-index="${itemIndex}">
       <span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>
+      <span class= "shopping-item js-shopping-edit hidden><input value ="${item.name}"></input><button class='edit-button'>Ok</button></span>
       <div class="shopping-item-controls">
         <button class="shopping-item-toggle js-item-toggle">
             <span class="button-label">check</span>
@@ -42,13 +42,15 @@ function generateShoppingItemsString(shoppingList) {
 function renderShoppingList() {
   // render the shopping list in the DOM
   console.log('`renderShoppingList` ran');
+  let count = 0;
   let filteredItems = [...STORE.items];
-
+ 
   if(STORE.hideChecked){
     filteredItems = filteredItems.filter(i => i.checked === false );
   }
-  if(STORE.searchPressed.length !== 0)
+  if(STORE.searchPressed.length !== 0){
     filteredItems = STORE.searchPressed[STORE.searchPressed.length -1];
+  }
 
     
 
@@ -129,6 +131,21 @@ function arraySearch(word){
   STORE.searchPressed.push(STORE.items.filter(i=> i.name.match(re)));
 }
 
+function editListItem(itemIndex,replace){
+  STORE.items.splice(itemIndex,1,replace);
+}
+
+
+//handles edit on the OKAY 
+function handlesEdit(){
+  $('#js-shopping-list-form').on('click', '.js-shopping item', function(event){
+    $(event.target).closest('li').find('.shopping-item js-shopping-edit hidden').toggleClass('hidden');
+    $(event.target).closest('li').find('.shopping-item js-shopping hidden').toggleClass('hidden');
+    const itemIndex = getItemIndexFromElement(event.currentTarget);
+    console.log($(this).text());
+  });
+}
+// need event listener for the double click <span> and to show the hidden 
 
 function handleShoppingList() {
   renderShoppingList();
@@ -136,6 +153,7 @@ function handleShoppingList() {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleCheck();
+  handlesEdit();
 }
 
 // when the page loads, call `handleShoppingList`
