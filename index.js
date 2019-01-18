@@ -10,6 +10,7 @@ const STORE = {
 
   hideChecked: false,
   searchPressed: [],
+  searched: false,
 };
 
 
@@ -46,6 +47,8 @@ function renderShoppingList() {
   if(STORE.hideChecked){
     filteredItems = filteredItems.filter(i => i.checked === false );
   }
+  if(STORE.searchPressed.length !== 0)
+    filteredItems = STORE.searchPressed[STORE.searchPressed.length -1];
 
     
 
@@ -123,8 +126,7 @@ function arraySearch(word){
   console.log(`Searching for ${word}`);
   const re = new RegExp(word, 'gi');
 
-
-  STORE.searchPressed = [...STORE.items.filter(i=> i.name.match(re))];
+  STORE.searchPressed.push(STORE.items.filter(i=> i.name.match(re)));
 }
 
 
