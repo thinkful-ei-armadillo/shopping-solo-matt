@@ -48,7 +48,6 @@ function generateShoppingItemsString(shoppingList, word) {
 
     const re = new RegExp(word, 'gi');
     if ((item.name.match(re) || !word) && (!STORE.hideChecked || item.checked === false)) {
-
       return generateItemElement(item, index);
     }
 
@@ -61,20 +60,7 @@ function generateShoppingItemsString(shoppingList, word) {
 
 
 function renderShoppingList() {
-  // render the shopping list in the DOM
-  console.log('`renderShoppingList` ran');
-  let count = 0;
   let filteredItems = [...STORE.items];
-
-  // if (STORE.hideChecked) {
-  //   filteredItems = filteredItems.filter(i => i.checked === false);
-  // }
-  // if (STORE.searchPressed.length !== 0) {
-  //   filteredItems = STORE.searchPressed[STORE.searchPressed.length - 1];
-  // }
-
-
-
   const shoppingListItemsString = generateShoppingItemsString(filteredItems, STORE.searchTerm);
 
   // insert that HTML into the DOM
@@ -153,8 +139,6 @@ function handleToggleCheck() {
 function arraySearch(word) {
   console.log(`Searching for ${word}`);
   const re = new RegExp(word, 'gi');
-
-  STORE.searchPressed.push(STORE.items.filter(i => i.name.match(re)));
 }
 
 function editListItem(itemIndex, replace) {
@@ -166,7 +150,6 @@ function editListItem(itemIndex, replace) {
 function handleEditItemClicked() {
   // we attach the event listener on the element
   $('.js-shopping-list').on('click', '.js-shopping-item', event => {
-
     // look for the current/clicked-on item and find the input and remove hidden
     $(event.target).closest('li').find('.js-shopping-item-edit').toggleClass('hidden');
     // look for the current item and find the `item` and hide it
